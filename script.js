@@ -162,7 +162,6 @@ const nextRandomVoice = createShuffler(randomVoices);
 const nextFiftyVoice = createShuffler(fiftyVoices);
 const nextMilestoneVoice = createShuffler(milestoneVoices);
 
-
 // Clicker event
 balanPicture.addEventListener('click', () => {
   clicks++;
@@ -195,7 +194,12 @@ resetBtn.addEventListener('click', () => {
 // =======================
 // Shop System
 // =======================
-// Define possible IDs per slot
+
+// ==== WEEKLY ROTATION SECTION ====
+// You only need to change the IDs below for each week!
+// For example, to switch to the "B" set next week, change 'item1A' to 'item1B' etc.
+
+// Define possible IDs per slot (do NOT change this)
 const shopSlots = [
   { ids: ['item1A', 'item1B'] },
   { ids: ['item2A', 'item2B'] },
@@ -203,14 +207,22 @@ const shopSlots = [
   { ids: ['item4A', 'item4B'] }
 ];
 
+// CHANGE THIS ARRAY FOR THE WEEKLY ROTATION!
 const shopItems = [
-  { id: 'item1A', price: 5000, lockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box.webp', unlockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box-unlocked.webp', fullSrc: 'sprites/shop/sellables/the-silk-road-demon.png' }, 
-  { id: 'item2A', price: 5000, lockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box.webp', unlockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box-unlocked.webp', fullSrc: 'sprites/shop/sellables/balan-balan-spin.gif' },
-  { id: 'item3A', price: 5000, lockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box.webp', unlockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box-unlocked.webp', fullSrc: 'sprites/shop/sellables/butterfly-girl-cat.png' },
-  { id: 'item4A', price: 5000, lockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box.webp', unlockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box-unlocked.webp', fullSrc: 'sprites/shop/sellables/sunbeam.png' }
+  // WEEK A (example): item1A, item2A, item3A, item4A
+  // WEEK B (example): item1B, item2B, item3B, item4B
+  // To rotate: just swap 'A' for 'B' in each id below, and update lockedSrc/unlockedSrc/fullSrc as needed.
+  { id: 'item1B', price: 100, lockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box.webp', unlockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box-unlocked.webp', fullSrc: 'sprites/shop/sellables/the-silk-road-demon.png' }, 
+  { id: 'item2B', price: 100, lockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box.webp', unlockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box-unlocked.webp', fullSrc: 'sprites/shop/sellables/balan-balan-spin.gif' },
+  { id: 'item3B', price: 100, lockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box.webp', unlockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box-unlocked.webp', fullSrc: 'sprites/shop/sellables/butterfly-girl-cat.png' },
+  { id: 'item4B', price: 100, lockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box.webp', unlockedSrc: 'sprites/shop/webp-shop-sprites/cardboard-box-unlocked.webp', fullSrc: 'sprites/shop/sellables/sunbeam.png' }
 ];
 
+// ==== END WEEKLY ROTATION SECTION ====
+
 // Clean up previous week's owned item IDs
+// This ensures that only the current week's items remain in localStorage as 'owned'.
+// If you change shopItems to 'itemXA' next week, this will remove 'itemXB' from localStorage, and vice versa.
 shopSlots.forEach((slot, idx) => {
   const currentID = shopItems[idx].id;
   const otherID = slot.ids.find(id => id !== currentID);
@@ -245,7 +257,7 @@ function renderShop(items, container) {
       if (owned) return;
       if (happyCoins >= item.price) {
         happyCoins -= item.price;
-        happyCoinsEl.textContent = happyCoins;
+        updateHappyCoins(); // <--- ADDED: fixes Happy Coins bug
 
         // Replace locked image with unlocked image for modal
         const imgEl = document.getElementById(item.id + '-img');
