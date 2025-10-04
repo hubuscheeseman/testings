@@ -168,17 +168,25 @@ balanPicture.addEventListener('click', () => {
   localStorage.setItem('balanClicks', clicks);
   clickCountEl.textContent = clicks;
 
-  // Briefly switch sprite for click feedback
-  setBalanSprite(clickSprite);
+  // NO sprite change here
 
   // Determine audio
   let voice = null;
-	if (milestones.some(m => clicks === m.count)) voice = nextMilestoneVoice();
-	else if (clicks % 50 === 0) voice = nextFiftyVoice();
-	else voice = nextRandomVoice();
-	playVoice(voice);
+  if (milestones.some(m => clicks === m.count)) voice = nextMilestoneVoice();
+  else if (clicks % 50 === 0) voice = nextFiftyVoice();
+  else voice = nextRandomVoice();
+  playVoice(voice);
 
-  setTimeout(checkMilestone, 200);
+  // DO NOT call checkMilestone() here!
+  // Only call it on mouseleave (see below)
+});
+
+// Hover effect for sprite change
+balanPicture.addEventListener('mouseenter', () => {
+  setBalanSprite(clickSprite);
+});
+balanPicture.addEventListener('mouseleave', () => {
+  checkMilestone(); // revert to correct milestone/default sprite when mouse leaves
 });
 
 // Reset clicks -> convert to Happy Coins
