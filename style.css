@@ -89,6 +89,12 @@ main {
   -webkit-user-drag: none;
   user-select: none;
   touch-action: manipulation;
+  /* UI: hover effect for feedback */
+  transition: transform 0.15s cubic-bezier(.4,0,.2,1), box-shadow 0.15s;
+}
+.balan-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
 }
 
 .balan-label {
@@ -207,6 +213,7 @@ main {
   justify-content: center;
 }
 
+/* Reverted: No hover effect for shop images */
 .shop-image img {
   width: 100%;
   max-width: 160px;
@@ -214,6 +221,7 @@ main {
   border-radius: 10px;
   object-fit: contain;
   cursor: pointer;
+  /* Removed transition and hover styles */
 }
 
 .buy-btn {
@@ -312,4 +320,6 @@ main {
 
 .modal[hidden] {
   display: none !important;
+
 }
+
